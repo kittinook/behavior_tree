@@ -1,0 +1,44 @@
+name: "robot_control"
+type: "SequenceNode"
+children:
+  - name: "checks"
+    type: "ParallelNode"
+    properties:
+      policy: "REQUIRE_ALL"
+    children:
+      - name: "check_battery"
+        type: "ConditionNode"
+        properties:
+          blackboard_key: "battery_level"
+          operator: ">="
+          expected_value: 20
+          namespace: "robot_state"
+      
+      - name: "work_sequence"
+        type: "SequenceNode"
+        children:
+          - name: "scan_area"
+            type: "ActionNode"
+            properties:
+              timeout: 2.0
+              retry_count: 3
+          
+          - name: "move_to_target"
+            type: "ActionNode"
+            properties:
+              args: [10, 10]
+              timeout: 5.0
+          
+          - name: "pick_object"
+            type: "ActionNode"
+            properties:
+              retry_count: 2
+          
+          - name: "return_to_base"
+            type: "ActionNode"
+  
+  - name: "charge_selector"
+    type: "SelectorNode"
+    children:
+      - name: "charge_battery"
+        type: "ActionNode"

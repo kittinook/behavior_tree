@@ -1,0 +1,20 @@
+{
+  "children": [
+    {
+      "type": "ParallelNode",
+      "name": "test",
+      "properties": {
+        "Policy": "REQUIRE_ALL"
+      },
+      "children": []
+    },
+    {
+      "type": "RetryNode",
+      "name": "test2",
+      "properties": {
+        "Max Attempts": "3"
+      },
+      "children": []
+    }
+  ]
+}
