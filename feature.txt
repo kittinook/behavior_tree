@@ -1,0 +1,239 @@
+blackboard.py ใหม่ให้สมบูรณ์ขึ้น โดยเพิ่มฟีเจอร์สำคัญดังนี้:
+
+BlackboardClient สำหรับจำกัดการเข้าถึงข้อมูลให้อยู่ในขอบเขตที่กำหนด
+Activity logging เพื่อติดตามการเปลี่ยนแปลง
+การบันทึกและโหลดสถานะจากไฟล์
+Metadata เพิ่มเติมเช่น last_modified_by
+Error handling ที่ดีขึ้น
+Documentation ที่สมบูรณ์
+
+----------------------------------------------------------------
+
+node.py ดังนี้:
+
+ระบบ Event Handling:
+
+INITIALIZED: เมื่อ node ถูกเริ่มต้น
+ENTERING/EXITING: ก่อน/หลังการทำงาน
+SETUP/SHUTDOWN: เมื่อเริ่ม/ปิดการทำงาน
+STATUS_CHANGED: เมื่อสถานะเปลี่ยน
+ERROR: เมื่อเกิดข้อผิดพลาด
+
+
+NodeMetadata สำหรับเก็บสถิติ:
+
+เวลาที่สร้าง/ทำงานล่าสุด
+จำนวนครั้งที่ทำงาน/สำเร็จ/ล้มเหลว
+เวลาทำงานเฉลี่ย
+
+
+Pre/Post-conditions:
+
+สามารถกำหนดเงื่อนไขก่อน/หลังทำงานได้
+ตรวจสอบอัตโนมัติทุกครั้งที่ทำงาน
+
+
+Lifecycle Management:
+
+setup/shutdown สำหรับเริ่ม/ปิดการทำงาน
+initialize สำหรับเริ่มต้นด้วย blackboard
+
+
+Error Handling:
+
+จัดการข้อผิดพลาดในทุกส่วน
+บันทึก log อย่างเหมาะสม
+
+
+Hierarchy Support:
+
+รองรับโครงสร้างแบบต้นไม้
+จัดการความสัมพันธ์ parent/child
+
+----------------------------------------------------------------
+
+TreeManager ดังนี้:
+
+Snapshot System:
+
+เก็บสถานะของ tree ณ จุดต่างๆ
+สามารถกู้คืนสถานะจาก snapshot ได้
+กำหนดความถี่ในการเก็บ snapshot ได้
+
+
+Execution Context:
+
+เก็บสถิติการทำงาน เช่น จำนวน ticks, เวลาเฉลี่ย
+นับจำนวนความสำเร็จ/ล้มเหลว/error
+เก็บประวัติการทำงาน
+
+
+Subtree Management:
+
+รองรับการสร้างและจ
+
+----------------------------------------------------------------
+
+composites.py ดังนี้:
+
+Memory Policies:
+
+PERSISTENT: จำสถานะระหว่าง tick
+FRESH: รีเซ็ตทุกครั้ง
+
+
+Parallel Policies:
+
+REQUIRE_ALL: ต้องสำเร็จทั้งหมด
+REQUIRE_ONE: สำเร็จอย่างน้อย 1
+SEQUENCE_STAR: ทำตามลำดับแต่ไม่หยุดถ้าล้มเหลว
+SELECTOR_STAR: เลือกทำแต่ไม่หยุดถ้าสำเร็จ
+
+
+Node Types:
+
+SequenceNode: ทำตามลำดับจนกว่าจะสำเร็จหรือล้มเหลว
+SelectorNode: เลือกทำจนกว่าจะสำเร็จหรือล้มเหลวทั้งหมด
+ParallelNode: ทำพร้อมกันตามนโยบายที่กำหนด
+ReactiveSequence: ตรวจสอบเงื่อนไขก่อนหน้าตลอด
+ReactiveSelector: เลือกใช้เงื่อนไขที่สำเร็จทันที
+RandomSelector: สุ่มลำดับการทำงาน
+
+
+ParallelNode Features:
+
+Success/Failure thresholds
+Synchronized execution
+Multiple policies
+State tracking
+
+--------------------------------
+
+ecorator nodes หลากหลายประเภทดังนี้:
+
+พื้นฐาน:
+
+InverterNode: กลับสถานะ
+ForceSuccessNode: บังคับให้สำเร็จ
+ForceFailureNode: บังคับให้ล้มเหลว
+
+
+การทำซ้ำ:
+
+RepeatNode: ทำซ้ำตามจำนวนครั้ง
+RetryNode: ลองใหม่เมื่อล้มเหลว
+CooldownNode: กำหนดระยะเวลารอระหว่างการทำงาน
+
+
+การจัดการเวลา:
+
+TimeoutNode: จำกัดเวลา
+
+----------------------------------------------------------------
+
+leaf nodes ที่สำคัญดังนี้:
+
+Action Nodes:
+
+ActionNode: Node พื้นฐานสำหรับทำงาน
+WaitNode: รอตามเวลาที่กำหนด
+DebugLogNode: บันทึก log
+EventEmitNode: ส่ง event
+ThrottleNode: จำกัดความถี่การทำงาน
+RetryUntilSuccessNode: ทำซ้ำจนสำเร็จ
+
+
+Condition Nodes:
+
+ConditionNode: Node พื้นฐานสำหรับตรวจสอบเงื่อนไข
+TimedConditionNode: ตรวจสอบเงื่อนไขในช่วงเวลา
+
+
+Blackboard Nodes:
+
+BlackboardSetNode: เซ็ตค่าใน blackboard
+BlackboardDeleteNode: ลบค่าจาก blackboard
+
+
+คุณสมบัติพิเศษ:
+
+รองรับทั้ง sync/async functions
+มีระบบ timeout และ retry
+เก็บสถิติการทำงาน
+รองรับการยกเลิกการทำงาน
+จัดการ error อย่างยืดหยุ่น
+
+--------------------------------------------------------
+
+visualization.py ดังนี้:
+
+รูปแบบการแสดงผล:
+
+Graphviz สำหรับสร้างแผนภาพ
+ASCII สำหรับแสดงใน console
+Mermaid สำหรับ sequence diagram
+HTML/WebSocket สำหรับ interactive view
+SVG สำหรับการส่งออก
+GIF animation สำหรับแสดงการเปลี่ยนแปลง
+
+
+Real-time Monitoring:
+
+WebSocket server สำหรับอัพเดตแบบ real-time
+ระบบเก็บประวัติการเปลี่ยนแปลง
+Console visualizer สำหรับแสดงผลใน terminal
+
+
+การสร้างรายงาน:
+
+สถิติการทำงานของ tree
+การกระจายของสถานะ
+เวลาทำงานเฉลี่ย
+
+
+Interactive Features:
+
+คลิกดูรายละเอียด node
+การอัพเดตแบบ real-time
+การแสดงสถิติและ metadata
+
+--------------------------------------------------------
+
+config_loader.py ดังนี้:
+
+รองรับหลายรูปแบบไฟล์:
+
+YAML
+JSON
+Python module
+
+
+ระบบตรวจสอบ Configuration:
+
+ตรวจสอบโครงสร้างด้วย JSON Schema
+ตรวจสอบ node types
+ตรวจสอบค่า properties
+รองรับ custom validators
+
+
+การแปลงรูปแบบข้อมูล:
+
+NodeConfig dataclass
+การแปลงระหว่าง dict และ NodeConfig
+การบันทึกกลับเป็นไฟล์
+
+
+ConfigMerger:
+
+รวม configuration หลายไฟล์
+รองรับการ override ค่า
+รวม children nodes
+
+
+Error Handling:
+
+ConfigValidationError สำหรับข้อผิดพลาด
+การ logging ที่เหมาะสม
+
+----------------------------------------------------------------
+
